@@ -1,4 +1,3 @@
-
 package it2e.abarquez.parkingslottrackerr;
 
 import java.sql.Connection;

@@ -1,136 +1,110 @@
-
 package it2e.abarquez.parkingslottrackerr;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Scanner;
 
-
 public class IT2EAbarquezParkingSlotTrackerr {
-    
+
+    Config config = new Config();
+    Scanner scanner = new Scanner(System.in);
 
     public void addCustomer() {
-        Scanner sc = new Scanner(System.in);
-        config conf = new config();
-        
         System.out.print("Customer Slot ID: ");
-        String c_slotid = sc.next();
+        String slotId = scanner.nextLine();
         System.out.print("Customer First Name: ");
-        String c_fname = sc.next();
+        String firstName = scanner.nextLine();
         System.out.print("Customer Last Name: ");
-        String c_lname = sc.next();
+        String lastName = scanner.nextLine();
         System.out.print("Customer Entry Time: ");
-        String c_intime = sc.next();
+        String entryTime = scanner.nextLine();
         System.out.print("Customer Exit Time: ");
-        String c_extime = sc.next();
+        String exitTime = scanner.nextLine();
 
-        String sql = "INSERT INTO tbl_tracker (c_id, c_Slot_ID, c_fname, c_lname, c_entry_time, c_exit_time, c_status) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-        conf.addRecord(sql, c_slotid, c_fname, c_lname, c_intime, c_extime, "active");
+        String sql = "INSERT INTO tbl_tracker (c_Slot_ID, c_fname, c_lname, c_entry_time, c_exit_time, c_status) VALUES (?, ?, ?, ?, ?, ?)";
+        config.addRecord(sql, slotId, firstName, lastName, entryTime, exitTime, "active");
     }
-    
+
     private void viewCustomers() {
-        String votersQuery = "SELECT * FROM tbl_customer";
-        String[] votersHeaders = {"ID", "fname", "address", "phone_number", "Status"};
-        String[] votersColumns = {"c_id", "c_Slot_ID", "c_fname", "c_lname", "c_entry_time", "c_exit_time", "c_status"};
-        config conf = new config();
-        conf.viewRecords(votersQuery, votersHeaders, votersColumns);
+        String query = "SELECT * FROM tbl_tracker";
+        String[] headers = {"ID", "Slot ID", "First Name", "Last Name", "Entry Time", "Exit Time", "Status"};
+        String[] columns = {"c_id", "c_Slot_ID", "c_fname", "c_lname", "c_entry_time", "c_exit_time", "c_status"};
+        config.viewRecords(query, headers, columns);
+    }
+
+    private void updateCustomer() {
+        System.out.println("Enter ID to update: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.println("New First Name: ");
+        String firstName = scanner.nextLine();
+        System.out.println("New Last Name: ");
+        String lastName = scanner.nextLine();
+        System.out.println("New Entry Time: ");
+        String entryTime = scanner.nextLine();
+        System.out.println("New Exit Time: ");
+        String exitTime = scanner.nextLine();
+        System.out.println("New Status: ");
+        String status = scanner.nextLine();
+
+        String query = "UPDATE tbl_tracker SET c_fname = ?, c_lname = ?, c_entry_time = ?, c_exit_time = ?, c_status = ? WHERE c_id = ?";
+        config.updateRecord(query, firstName, lastName, entryTime, exitTime, status, id);
+    }
+
+    private void deleteCustomer() {
+        System.out.println("Enter ID to delete: ");
+        int id = scanner.nextInt();
+
+        String query = "DELETE FROM tbl_tracker WHERE c_id = ?";
+        config.deleteRecord(query, id);
+    }
+
+    public void run() {
         
     }
-    
-     private void updateCustomer(){
-         Scanner sc = new Scanner(System.in);
-         System.out.println("Enter ID to update: ");
-         int id = sc.nextInt();
-         
-         System.out.println("New First Name: ");
-         String fname = sc.next();
-         
-         System.out.println("New Address: ");
-         String address = sc.next();
-         
-         System.out.println("New Phone Number: ");
-         int phone_number = sc.nextInt();
-         
-         System.out.println("New Status: ");
-         String status = sc.next();
-         
-         
-         String qry = "UPDATE tbl_customers SET c_fname = ?, c_address = ?, c_phone_number = ?, c_status = ? WHERE C_id = ?";
-         
-         config conf = new config();
-         conf.updateRecord(qry, fname, address, phone_number, status, id);
-         
-     }
-    
-     private void deleteCustomer(){
-         Scanner sc = new Scanner(System.in);
-         System.out.println("Enter ID to delete: ");
-         int id = sc.nextInt();
-         
-         String qry = "DELETE FROM tbl_customers WHERE c_id = ?";
-         config conf = new config();
-         conf.deleteRecord(qry, id);
-         
-     }
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        String resp;
+        IT2EAbarquezParkingSlotTrackerr app = new IT2EAbarquezParkingSlotTrackerr();
+        Scanner scanner = new Scanner(System.in);
         
-        do{
-        System.out.println("1 ADD");
-        System.out.println("2 VIEW");
-        System.out.println("3 UPDATE");
-        System.out.println("4 DELETE");
-        System.out.println("5 EXIT");
+        String response;
+        do {
+            System.out.println("1 ADD");
+            System.out.println("2 VIEW");
+            System.out.println("3 UPDATE");
+            System.out.println("4 DELETE");
+            System.out.println("5 EXIT");
+            System.out.print("Enter action: ");
+            int action = scanner.nextInt();
+            scanner.nextLine();
 
-        System.out.println("Enter action:");
-        int action = sc.nextInt();
-        IT2EAbarquezParkingSlotTrackerr test = new IT2EAbarquezParkingSlotTrackerr();
-        switch (action) {
-            
-        case 1:
-                 test.addCustomer();
-                 
-                 break;
-                 
-                 
-            case 2:
-                test.viewCustomers();
-                
-                
-            break;
-            
-            
-            case 3:
-                 test.viewCustomers();
-                test.updateCustomer();
-                
-                
-            break;
-           
-            case 4:
-                  test.viewCustomers();
-                test.deleteCustomer();
-                test.viewCustomers();
-                break;
-     
-            
-        }
-        System.out.print("Continue? ");
-            resp = sc.next();
+            switch (action) {
+                case 1:
+                    app.addCustomer();
+                    break;
+                case 2:
+                    app.viewCustomers();
+                    break;
+                case 3:
+                    app.viewCustomers(); 
+                    app.updateCustomer();
+                    break;
+                case 4:
+                    app.viewCustomers(); 
+                    app.deleteCustomer();
+                    break;
+                case 5:
+                    System.out.println("Thank You!");
+                    return; 
+                default:
+                    System.out.println("Invalid option, please try again.");
+                    break;
+            }
 
-        }while(resp.equalsIgnoreCase("yes"));
-            System.out.println("Thank You!");
+            System.out.print("Continue? (yes/no): ");
+            response = scanner.next();
+
+        } while (response.equalsIgnoreCase("yes"));
         
-
+        System.out.println("Thank You!");
     }
-
- 
 }
-
-
-
-
