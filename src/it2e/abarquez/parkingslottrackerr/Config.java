@@ -148,7 +148,44 @@ public void deleteRecord(String sql, Object... values) {
         System.out.println("Error deleting record: " + e.getMessage());
     }
 }
-    
+   
+public boolean doesIDExist(String table, String idColumn, int id){
+        
+        String findID = "SELECT * FROM " + table + " WHERE " + idColumn + " = ?";
+        
+        try (Connection con = connectDB();
+            PreparedStatement pst = con.prepareStatement(findID);){
+            
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+            
+            if (rs.next()){
+                return true;
+            }
+            
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return false;
+    }
+public String getDataFromID(String table, int id, String column){
+        String findID = "SELECT " + column + " FROM " + table + " WHERE ID = ?";
+        String data = "";
+        
+        try (Connection con = connectDB();      
+            PreparedStatement pst = con.prepareStatement(findID)){
+            
+            pst.setInt(1, id);
+            try (ResultSet rs = pst.executeQuery()) {
+                data = rs.getString(column);
+            }
+                               
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        return data;
+    }
     }
         
  
